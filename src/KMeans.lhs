@@ -11,8 +11,7 @@ Divide up a list of Points based on their distance from some prototypes
  cluster ps cs = addToClusters cs (clusterInit [] cs) ps
 
 > clusterInit :: [(Point, [Point])] -> [Point] -> [(Point, [Point])]
-> clusterInit xs  []    = xs
-> clusterInit xs (c:cs) = clusterInit ((c, []):xs) cs
+> clusterInit = foldl (\xs c -> (c, []) : xs)
 
 > distance xs ys = sum . map (\x -> x * x) $ diffs xs ys
 >   where diffs    []     ys  = []

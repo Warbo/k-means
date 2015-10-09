@@ -1,4 +1,4 @@
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7101" }:
+{ nixpkgs ? import <nixpkgs> {}, compiler ? "default" }:
 
 let
 
@@ -11,14 +11,18 @@ let
         pname = "k-means";
         version = "0.1.0.0";
         src = ./.;
-        buildDepends = [ base ];
-        testDepends = [ base QuickCheck tasty tasty-quickcheck ];
+        libraryHaskellDepends = [ base ];
+        testHaskellDepends = [ base QuickCheck tasty tasty-quickcheck ];
         homepage = "http://chriswarbo.net/git/k-means";
         description = "Simple k-means clustering";
         license = stdenv.lib.licenses.publicDomain;
       };
 
-  drv = pkgs.haskell.packages.${compiler}.callPackage f {};
+  haskellPackages = if compiler == "default"
+                      then pkgs.haskellPackages
+                      else pkgs.haskell.packages.${compiler};
+
+  drv = haskellPackages.callPackage f {};
 
 in
 
